@@ -2,6 +2,7 @@ import numpy as np
 from numpy.linalg import *
 import time
 import os
+import pandas as pd
 import ortho_seq_code.sr as sr
 from ortho_seq_code.constants_orthoseqs import *
 import click
@@ -31,6 +32,18 @@ def orthogonal_polynomial(
     start_time = time.time()
     with open(filename) as f:
         seq = f.readlines()
+
+    # Automatically fills in lowercase n's at end of every line that needs it
+    if len(min(incomplete_seq, key=len)) != len(max(incomplete_seq, key=len)):
+        seq_series = pd.Series(seq).str[0:-1]
+        MAX_NUCLEOTIDE = max(seq_series.str.len()) # Could replace sites parameter in future
+        incomplete_seq_series = seq_series[seq_series.str.len()<MAX_NUCLEOTIDE]
+        while len(incomplete_seq_series) > 0:
+            incomplete_seq_series = seq_series[seq_series.str.len()<MAX_NUCLEOTIDE]
+            seq_series[incomplete_seq_series.index] += "n"
+        seq_series+= "\n"
+        seq = list(seq_series)
+
     global i
     # file containing trait values that will be mapped to sequence
     # vectors that must be the same size as F
