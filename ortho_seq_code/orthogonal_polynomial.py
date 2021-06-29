@@ -36,10 +36,10 @@ def orthogonal_polynomial(
     # Automatically fills in lowercase n's at end of every line that needs it
     if len(min(incomplete_seq, key=len)) != len(max(incomplete_seq, key=len)):
         seq_series = pd.Series(seq).str[0:-1]
-        MAX_NUCLEOTIDE = max(seq_series.str.len()) # Could replace sites parameter in future
-        incomplete_seq_series = seq_series[seq_series.str.len()<MAX_NUCLEOTIDE]
+        MAX_SITES = max(seq_series.str.len()) # Could replace sites parameter in future
+        incomplete_seq_series = seq_series[seq_series.str.len()<MAX_SITES]
         while len(incomplete_seq_series) > 0:
-            incomplete_seq_series = seq_series[seq_series.str.len()<MAX_NUCLEOTIDE]
+            incomplete_seq_series = seq_series[seq_series.str.len()<MAX_SITES]
             seq_series[incomplete_seq_series.index] += "n"
         seq_series+= "\n"
         seq = list(seq_series)
