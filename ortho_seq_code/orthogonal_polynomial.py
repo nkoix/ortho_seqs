@@ -34,7 +34,7 @@ def orthogonal_polynomial(
         seq = f.readlines()
 
     # Automatically fills in lowercase n's at end of every line that needs it
-    if len(min(incomplete_seq, key=len)) != len(max(incomplete_seq, key=len)):
+    if len(min(seq, key=len)) != len(max(seq, key=len)):
         seq_series = pd.Series(seq).str[0:-1]
         MAX_SITES = max(seq_series.str.len()) # Could replace sites parameter in future
         incomplete_seq_series = seq_series[seq_series.str.len()<MAX_SITES]
@@ -148,6 +148,7 @@ def orthogonal_polynomial(
         # keep in alpha order
         # ---------------------------------First order terms ----------------------
         # calculate mean vectors first
+        arrays_save = {}
         for i, j in itertools.product(range_popsize, range_sites):
             mean[j] += phi[j][i] / pop_size
         arrays_save[naming + "_mean"] = mean
